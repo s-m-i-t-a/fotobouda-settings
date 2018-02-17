@@ -2,6 +2,7 @@ defmodule Settings.Model do
   @moduledoc """
   Model structure and defaults.
   """
+  require Logger
 
 
   @social_networks [:facebook, :twitter, :pinterest]
@@ -27,16 +28,30 @@ defmodule Settings.Model do
   end
 
   def put_social_media(%__MODULE__{} = model, media) do
-    case is_in_social_media?(media) do
-      true -> %{model | social_media: media}
-      _ -> model
-    end
+    media
+    |> is_in_social_media?()
+    |> update(model)
   end
 
   defp is_in_social_media?(media) do
-    Enum.reduce(media, true, fn(x, acc) ->
-      x in @social_networks and acc
-    end)
+    Enum.reduce_while(
+      media,
+      nil,
+      fn
+        (x, _acc) when x in @social_networks ->
+          {:cont, {:ok, media}}
+        (x, _acc) ->
+          {:halt, {:error, "'#{x}' - invalid social network name."}}
+      end
+    )
   end
 
+  defp update({:ok, media}, %__MODULE__{} = model) do
+    %{model | social_media: media}
+  end
+
+  defp update({:error, msg}, %__MODULE__{} = model) do
+    Logger.error(fn -> msg end)
+    model
+  end
 end
