@@ -29,8 +29,8 @@ defmodule Settings.Model do
 
   def put_social_media(%__MODULE__{} = model, media) do
     media
-    |> is_in_social_media?()
-    |> update(model)
+      |> is_in_social_media?()
+      |> update(model)
   end
 
   defp is_in_social_media?(media) do
