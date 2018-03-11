@@ -17,8 +17,8 @@ defmodule Settings.Server do
   end
 
   @impl true
-  def init(%Model{}) do
-    {:ok, from_json_file()}
+  def init(%Model{} = state) do
+    {:ok, from_json_file(state)}
   end
   # def init(%Model{} = state) do
   #   {:ok, state}
@@ -43,8 +43,16 @@ defmodule Settings.Server do
     File.write!(settings_json(), Poison.encode!(data), [:utf8, :write])
   end
 
-  defp from_json_file() do
-    File.read!(settings_json())
-      |> Poison.decode!(as: %Model{})
+  defp from_json_file(state) do
+    case File.read(settings_json()) do
+      {:ok, data} ->
+          Poison.decode!(data, as: %Model{})
+
+      {:error, _err} ->
+        state
+    end
   end
 end
+
+
+
