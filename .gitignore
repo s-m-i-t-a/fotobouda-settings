@@ -25,3 +25,4 @@ settings-*.tar
 tags
 .vimrc
 .projections.json
+settings.json
