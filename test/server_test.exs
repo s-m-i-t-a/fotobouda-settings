@@ -15,6 +15,12 @@ defmodule ServerTest do
       end
     end
 
+    test "should load default values from settings module if this file does not exist" do
+      {:reply, state, state} = Server.handle_call({:get}, nil, %Model{})
+
+      assert state == %Model{}
+    end
+
     test "should save data to settings.json"do
       {:noreply, new_state} = Server.handle_cast({:set, @state}, nil)
       {:ok, init} = Server.init(@state)

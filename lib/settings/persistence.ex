@@ -18,7 +18,7 @@ defmodule Settings.Persistence do
 
         decode_data
         |> Map.get(:social_media)
-        |> Enum.map(fn(x) -> Model.media(x) end)
+        |> Model.media_to_atom()
         |> (&Map.replace!(decode_data, :social_media, &1)).()
 
       {:error, _err} ->
