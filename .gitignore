@@ -25,4 +25,5 @@ settings-*.tar
 tags
 .vimrc
 .projections.json
+.elixir_ls
 settings.json

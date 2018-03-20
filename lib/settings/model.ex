@@ -33,6 +33,10 @@ defmodule Settings.Model do
       |> update(model)
   end
 
+  def media("facebook"), do: :facebook
+  def media("twitter"), do: :twitter
+  def media("pinterest"), do: :pinterest
+
   defp is_in_social_media?(media) do
     Enum.reduce_while(
       media,
