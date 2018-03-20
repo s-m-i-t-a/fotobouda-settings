@@ -29,13 +29,18 @@ defmodule Settings.Model do
 
   def put_social_media(%__MODULE__{} = model, media) do
     media
-      |> is_in_social_media?()
-      |> update(model)
+    |> media_to_atom()
+    |> is_in_social_media?()
+    |> update(model)
   end
 
-  def media("facebook"), do: :facebook
-  def media("twitter"), do: :twitter
-  def media("pinterest"), do: :pinterest
+  def media_to_atom(media) do
+    Enum.map(media, fn(x) -> media(x) end)
+  end
+
+  defp media("facebook"), do: :facebook
+  defp media("twitter"), do: :twitter
+  defp media("pinterest"), do: :pinterest
 
   defp is_in_social_media?(media) do
     Enum.reduce_while(
