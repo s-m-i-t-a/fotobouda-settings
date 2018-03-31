@@ -18,7 +18,7 @@ defmodule Settings.Server do
 
   @impl true
   def init(%Model{} = state) do
-    {:ok, Persistence.from_json_file(state)}
+    Persistence.from_json_file(state)
   end
 
   @impl true

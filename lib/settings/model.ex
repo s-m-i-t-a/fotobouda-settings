@@ -6,6 +6,7 @@ defmodule Settings.Model do
 
 
   @social_networks [:facebook, :twitter, :pinterest]
+  @media_list Enum.map(@social_networks, &Atom.to_string/1)
 
   @type social_networks :: :facebook | :twitter | :pinterest
 
@@ -29,31 +30,35 @@ defmodule Settings.Model do
 
   def put_social_media(%__MODULE__{} = model, media) do
     media
-    |> media_to_atom()
     |> is_in_social_media?()
+    |> media_to_atom()
     |> update(model)
   end
-
-  def media_to_atom(media) do
-    Enum.map(media, fn(x) -> media(x) end)
-  end
-
-  defp media("facebook"), do: :facebook
-  defp media("twitter"), do: :twitter
-  defp media("pinterest"), do: :pinterest
 
   defp is_in_social_media?(media) do
     Enum.reduce_while(
       media,
       nil,
       fn
-        (x, _acc) when x in @social_networks ->
+        (x, _acc) when x in @media_list ->
           {:cont, {:ok, media}}
         (x, _acc) ->
           {:halt, {:error, "'#{x}' - invalid social network name."}}
       end
     )
   end
+
+  def media_to_atom({:ok, media}) do
+    {:ok, Enum.map(media, &media/1)}
+  end
+
+  def media_to_atom(err) do
+    err
+  end
+
+  defp media("facebook"), do: :facebook
+  defp media("twitter"), do: :twitter
+  defp media("pinterest"), do: :pinterest
 
   defp update({:ok, media}, %__MODULE__{} = model) do
     %{model | social_media: media}

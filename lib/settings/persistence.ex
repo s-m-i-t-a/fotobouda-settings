@@ -12,17 +12,44 @@ defmodule Settings.Persistence do
   end
 
   def from_json_file(state) do
-    case File.read(@settings_json) do
-      {:ok, data} ->
-        decode_data = Poison.decode!(data, as: %Model{})
+    @settings_json
+    |> File.read()
+    |> decode_data()
+    |> update_social_media_to_atom()
+    |> return_state(state)
+  end
 
-        decode_data
-        |> Map.get(:social_media)
-        |> Model.media_to_atom()
-        |> (&Map.replace!(decode_data, :social_media, &1)).()
+  defp decode_data({:ok, data}) do
+    Poison.decode(data, as: %Model{})
+  end
 
-      {:error, _err} ->
-        state
-    end
+  defp decode_data(err) do
+    err
+  end
+
+  defp update_social_media_to_atom({:ok, data}) do
+    {:ok, social_media} =
+      data
+      |> get_social_media()
+      |> Model.media_to_atom()
+
+
+    {:ok, Map.replace!(data, :social_media, social_media)}
+  end
+
+  defp update_social_media_to_atom(err) do
+    err
+  end
+
+  defp get_social_media(data) do
+    {:ok, Map.get(data, :social_media)}
+  end
+
+  defp return_state({:ok, data}, _state) do
+    {:ok, data}
+  end
+
+  defp return_state(_result, state) do
+    {:ok, state}
   end
 end

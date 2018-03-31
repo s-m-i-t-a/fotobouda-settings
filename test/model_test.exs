@@ -17,12 +17,12 @@ defmodule ModelTest do
   end
 
   test "should update model with social network" do
-    media = [:facebook, :twitter]
+    media = ["facebook", "twitter"]
     %{social_media: social_media} =
       %Model{}
       |> Model.put_social_media(media)
 
-    assert social_media == media
+    assert social_media == [:facebook, :twitter]
   end
 
   test "should update model with event name" do
