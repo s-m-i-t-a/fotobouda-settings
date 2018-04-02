@@ -5,19 +5,23 @@ defmodule Settings.Model do
   require Logger
 
 
+  @camera [:wifi_usb, :sony_hx60]
   @social_networks [:facebook, :twitter, :pinterest]
   @media_list Enum.map(@social_networks, &Atom.to_string/1)
 
+  @type camera :: :wifi_usb | :sony_hx60
   @type social_networks :: :facebook | :twitter | :pinterest
 
   @type t :: %__MODULE__{
     name_event: String.t,
-    social_media: list social_networks
+    social_media: (list social_networks),
+    camera: camera,
   }
 
   defstruct [
     name_event: "",
-    social_media: []
+    social_media: [],
+    camera: :wifi_usb,
   ]
 
   def create() do
@@ -33,6 +37,14 @@ defmodule Settings.Model do
     |> is_in_social_media?()
     |> media_to_atom()
     |> update(model)
+  end
+
+  def put_camera(%__MODULE__{} = model, camera_type) when camera_type in @camera do
+    %{model | camera: camera_type}
+  end
+
+  def put_camera_as_string(%__MODULE__{} = model, camera_type) do
+    put_camera(model, camera(camera_type))
   end
 
   defp is_in_social_media?(media) do
@@ -56,10 +68,6 @@ defmodule Settings.Model do
     err
   end
 
-  defp media("facebook"), do: :facebook
-  defp media("twitter"), do: :twitter
-  defp media("pinterest"), do: :pinterest
-
   defp update({:ok, media}, %__MODULE__{} = model) do
     %{model | social_media: media}
   end
@@ -67,5 +75,20 @@ defmodule Settings.Model do
   defp update({:error, msg}, %__MODULE__{} = model) do
     Logger.error(fn -> msg end)
     model
+  end
+
+  defp media("facebook"), do: :facebook
+  defp media("twitter"), do: :twitter
+  defp media("pinterest"), do: :pinterest
+  defp camera("wifi_usb"), do: :wifi_usb
+  defp camera("sony_hx60"), do: :sony_hx60
+end
+
+defimpl Poison.Decoder, for: Settings.Model do
+  alias Settings.Model
+
+  def decode(value, _options) do
+    value
+    |> Model.put_camera_as_string(Map.get(value, :camera))
   end
 end
