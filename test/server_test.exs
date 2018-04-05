@@ -6,7 +6,7 @@ defmodule ServerTest do
   @settings_json "settings.json"
   @name_event "foo"
   @media [:facebook, :twitter]
-  @camera :sony_hx60
+  @camera :usb_nikon
   @state %Model{name_event: @name_event, social_media: @media, camera: @camera}
 
   describe "Server Settings" do
