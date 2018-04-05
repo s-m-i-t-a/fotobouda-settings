@@ -5,17 +5,17 @@ defmodule Settings.Model do
   require Logger
 
 
-  @camera [:wifi_sony_hx60, :usb_nikon]
+  @cameras [:wifi_sony_hx60, :usb_nikon]
   @social_networks [:facebook, :twitter, :pinterest]
   @media_list Enum.map(@social_networks, &Atom.to_string/1)
 
-  @type camera :: :wifi_sony_hx60 | :usb_nikon
+  @type camera_type :: :wifi_sony_hx60 | :usb_nikon
   @type social_networks :: :facebook | :twitter | :pinterest
 
   @type t :: %__MODULE__{
     name_event: String.t,
     social_media: (list social_networks),
-    camera: camera,
+    camera: camera_type,
   }
 
   defstruct [
@@ -39,7 +39,7 @@ defmodule Settings.Model do
     |> update(model)
   end
 
-  def put_camera(%__MODULE__{} = model, camera_type) when camera_type in @camera do
+  def put_camera(%__MODULE__{} = model, camera_type) when camera_type in @cameras do
     %{model | camera: camera_type}
   end
 

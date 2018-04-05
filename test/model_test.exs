@@ -33,5 +33,14 @@ defmodule ModelTest do
 
     assert name_event == name
   end
+
+  test "should update model with camera type" do
+    camera_type = "usb_nikon"
+    %{camera: camera} =
+      %Model{}
+      |> Model.put_camera_as_string(camera_type)
+
+    assert camera == :usb_nikon
+  end
 end
 
