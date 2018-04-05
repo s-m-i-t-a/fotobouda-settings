@@ -5,11 +5,11 @@ defmodule Settings.Model do
   require Logger
 
 
-  @camera [:wifi_usb, :sony_hx60]
+  @camera [:wifi_sony_hx60, :usb_nikon]
   @social_networks [:facebook, :twitter, :pinterest]
   @media_list Enum.map(@social_networks, &Atom.to_string/1)
 
-  @type camera :: :wifi_usb | :sony_hx60
+  @type camera :: :wifi_sony_hx60 | :usb_nikon
   @type social_networks :: :facebook | :twitter | :pinterest
 
   @type t :: %__MODULE__{
@@ -21,7 +21,7 @@ defmodule Settings.Model do
   defstruct [
     name_event: "",
     social_media: [],
-    camera: :wifi_usb,
+    camera: :wifi_sony_hx60,
   ]
 
   def create() do
@@ -80,8 +80,8 @@ defmodule Settings.Model do
   defp media("facebook"), do: :facebook
   defp media("twitter"), do: :twitter
   defp media("pinterest"), do: :pinterest
-  defp camera("wifi_usb"), do: :wifi_usb
-  defp camera("sony_hx60"), do: :sony_hx60
+  defp camera("wifi_sony_hx60"), do: :wifi_sony_hx60
+  defp camera("usb_nikon"), do: :usb_nikon
 end
 
 defimpl Poison.Decoder, for: Settings.Model do
