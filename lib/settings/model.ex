@@ -32,6 +32,11 @@ defmodule Settings.Model do
     %{model | name_event: name}
   end
 
+  def put_social_media(%__MODULE__{} = model, media) when media == [] do
+    {:ok, media}
+    |> update(model)
+  end
+
   def put_social_media(%__MODULE__{} = model, media) do
     media
     |> is_in_social_media?()

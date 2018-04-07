@@ -25,6 +25,15 @@ defmodule ModelTest do
     assert social_media == [:facebook, :twitter]
   end
 
+  test "should update model with no social network" do
+    media = []
+    %{social_media: social_media} =
+      %Model{}
+      |> Model.put_social_media(media)
+
+    assert social_media == []
+  end
+
   test "should update model with event name" do
     name = "Foo Bar"
     %{name_event: name_event} =
