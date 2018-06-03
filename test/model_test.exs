@@ -51,5 +51,32 @@ defmodule ModelTest do
 
     assert camera == :usb_nikon
   end
+
+  test "should update model with Qr code on client" do
+    on_client = true
+    %{qr_code: qr_code} =
+      %Model{}
+      |> Model.put_qr_code_on_client(on_client)
+
+    assert qr_code.on_client == on_client
+  end
+
+  test "should update model with Qr code on photo" do
+    on_photo = true
+    %{qr_code: qr_code} =
+      %Model{}
+      |> Model.put_qr_code_on_photo(on_photo)
+
+    assert qr_code.on_photo == on_photo
+  end
+
+  test "should update model with Qr code position" do
+    qr_code_position = "right_up"
+    %{qr_code: qr_code} =
+      %Model{}
+      |> Model.put_qr_code_position_as_string(qr_code_position)
+
+    assert qr_code.position == :right_up
+  end
 end
 

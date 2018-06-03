@@ -7,7 +7,17 @@ defmodule ServerTest do
   @name_event "foo"
   @media [:facebook, :twitter]
   @camera :usb_nikon
-  @state %Model{name_event: @name_event, social_media: @media, camera: @camera}
+  @position :left_down
+  @state %Model{
+      name_event: @name_event,
+      social_media: @media,
+      camera: @camera,
+      qr_code: %Settings.QrCode{
+        on_client: false,
+        on_photo: false,
+        position: @position
+        }
+      }
 
   describe "Server Settings" do
     setup do
