@@ -3,7 +3,7 @@ defmodule Settings.Persistence do
   Saving and loading data from json file.
   """
 
-  alias Settings.Model
+  alias Settings.{Model, QrCode}
 
   @settings_json "settings.json"
 
