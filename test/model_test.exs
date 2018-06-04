@@ -55,7 +55,7 @@ defmodule ModelTest do
     on_client = true
     %{qr_code: qr_code} =
       %Model{}
-      |> Model.put_qr_code_on_client(on_client)
+      |> QrCode.put_on_client(on_client)
 
     assert qr_code.on_client == on_client
   end
@@ -64,7 +64,7 @@ defmodule ModelTest do
     on_photo = true
     %{qr_code: qr_code} =
       %Model{}
-      |> Model.put_qr_code_on_photo(on_photo)
+      |> QrCode.put_on_photo(on_photo)
 
     assert qr_code.on_photo == on_photo
   end
@@ -72,7 +72,7 @@ defmodule ModelTest do
   test "should update model with Qr code position" do
     %{qr_code: qr_code} =
       %Model{qr_code: %QrCode{position: "right_up"}}
-      |> Model.put_qr_code_position_as_string()
+      |> QrCode.put_position_as_string()
 
     assert qr_code.position == :right_up
   end

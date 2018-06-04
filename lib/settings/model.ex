@@ -29,11 +29,6 @@ defmodule Settings.Model do
     qr_code: %QrCode{},
   ]
 
-  defdelegate put_qr_code_on_client(model, is_toggled?), to: Settings.QrCode
-  defdelegate put_qr_code_on_photo(model, is_toggled?), to: Settings.QrCode
-  defdelegate put_qr_code_position(model, new_position), to: Settings.QrCode
-  defdelegate put_qr_code_position_as_string(model), to: Settings.QrCode
-
   def create() do
     %__MODULE__{}
   end
@@ -109,7 +104,7 @@ defimpl Poison.Decoder, for: Settings.Model do
   def decode(value, _options) do
     value
     |> Model.put_camera_as_string()
-    |> Model.put_qr_code_position_as_string()
+    |> QrCode.put_position_as_string()
   end
 end
 
