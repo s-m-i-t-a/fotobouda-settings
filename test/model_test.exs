@@ -3,7 +3,7 @@ defmodule ModelTest do
 
   import ExUnit.CaptureLog
 
-  alias Settings.Model
+  alias Settings.{Model, QrCode}
 
   test "should not update model with invalid social network" do
 
@@ -44,10 +44,9 @@ defmodule ModelTest do
   end
 
   test "should update model with camera type" do
-    camera_type = "usb_nikon"
     %{camera: camera} =
-      %Model{}
-      |> Model.put_camera_as_string(camera_type)
+      %Model{camera: "usb_nikon"}
+      |> Model.put_camera_as_string()
 
     assert camera == :usb_nikon
   end
@@ -71,10 +70,9 @@ defmodule ModelTest do
   end
 
   test "should update model with Qr code position" do
-    qr_code_position = "right_up"
     %{qr_code: qr_code} =
-      %Model{}
-      |> Model.put_qr_code_position_as_string(qr_code_position)
+      %Model{qr_code: %QrCode{position: "right_up"}}
+      |> Model.put_qr_code_position_as_string()
 
     assert qr_code.position == :right_up
   end
