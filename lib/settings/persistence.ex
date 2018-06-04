@@ -3,7 +3,7 @@ defmodule Settings.Persistence do
   Saving and loading data from json file.
   """
 
-  alias Settings.{Model, QrCode}
+  alias Settings.Model
 
   @settings_json "settings.json"
 
@@ -28,13 +28,18 @@ defmodule Settings.Persistence do
   end
 
   defp update_social_media_to_atom({:ok, data}) do
-    {:ok, social_media} =
+    social_media =
       data
       |> get_social_media()
       |> Model.media_to_atom()
+      |> elem(1)
 
+    update_model =
+      data
+      |> Map.get_and_update(:social_media, &{&1, social_media})
+      |> elem(1)
 
-    {:ok, Map.replace!(data, :social_media, social_media)}
+    {:ok, update_model}
   end
 
   defp update_social_media_to_atom(err) do
