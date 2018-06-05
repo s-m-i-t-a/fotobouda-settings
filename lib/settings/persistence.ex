@@ -28,26 +28,15 @@ defmodule Settings.Persistence do
   end
 
   defp update_social_media_to_atom({:ok, data}) do
-    social_media =
-      data
-      |> get_social_media()
-      |> Model.media_to_atom()
-      |> elem(1)
-
     update_model =
-      data
-      |> Map.get_and_update(:social_media, &{&1, social_media})
-      |> elem(1)
+      data.social_media
+      |> update_in(fn(media) -> {:ok, media} |> Model.media_to_atom() |> elem(1) end)
 
     {:ok, update_model}
   end
 
   defp update_social_media_to_atom(err) do
     err
-  end
-
-  defp get_social_media(data) do
-    {:ok, Map.get(data, :social_media)}
   end
 
   defp return_state({:ok, data}, _state) do

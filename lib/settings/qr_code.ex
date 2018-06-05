@@ -17,51 +17,29 @@ defmodule Settings.QrCode do
             on_photo: false,
             position: :left_down
 
-  def put_on_client(model, is_toggled?) do
-    updated_qr_code =
-      model
-      |> update_qr_code(:on_client, is_toggled?)
-
-    %{model | qr_code: updated_qr_code}
+  @spec put_on_client(Settings.Model.t(), boolean()) :: Settings.Model.t()
+  def put_on_client(model, toggled?) do
+    put_in(model.qr_code.on_client, toggled?)
   end
 
-  def put_on_photo(model, is_toggled?) do
-    updated_qr_code =
-      model
-      |> update_qr_code(:on_photo, is_toggled?)
-
-    %{model | qr_code: updated_qr_code}
+  @spec put_on_photo(Settings.Model.t(), boolean()) :: Settings.Model.t()
+  def put_on_photo(model, toggled?) do
+    put_in(model.qr_code.on_photo, toggled?)
   end
 
+  @spec put_position(Settings.Model.t(), position()) :: Settings.Model.t()
   def put_position(model, new_position)
     when new_position in @positions do
-    updated_qr_code =
-      model
-      |> update_qr_code(:position, new_position)
-
-    %{model | qr_code: updated_qr_code}
+    put_in(model.qr_code.position, new_position)
   end
 
+  @spec put_position_as_string(Settings.Model.t()) :: Settings.Model.t()
   def put_position_as_string(model) do
-    pos =
-      model
-      |> Map.get(:qr_code)
-      |> Map.get(:position)
-
-    put_position(model, position(pos))
+    put_position(model, position(model.qr_code.position))
   end
 
   defp position("left_down"), do: :left_down
   defp position("left_up"), do: :left_up
   defp position("right_down"), do: :right_down
   defp position("right_up"), do: :right_up
-
-  defp update_qr_code(model, key, value) do
-    {_, update_model} =
-      model
-      |> Map.get(:qr_code)
-      |> Map.get_and_update(key, &{&1, value})
-
-    update_model
-  end
 end
