@@ -6,7 +6,7 @@ defmodule Settings.MixProject do
   def project do
     [
       app: :settings,
-      version: "1.1.1",
+      version: "2.0.0",
       elixir: "~> 1.6",
       start_permanent: Mix.env() == :prod,
       test_coverage: [tool: ExCoveralls],
