@@ -54,11 +54,7 @@ defmodule Settings.Model do
   end
 
   def put_camera_as_string(%__MODULE__{} = model) do
-    camera_type =
-      model
-      |> Map.get(:camera)
-
-    put_camera(model, camera(camera_type))
+    put_camera(model, camera(model.camera))
   end
 
   defp is_in_social_media?(media) do
