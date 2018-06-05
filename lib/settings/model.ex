@@ -99,7 +99,7 @@ defmodule Settings.Model do
 end
 
 defimpl Poison.Decoder, for: Settings.Model do
-  alias Settings.Model
+  alias Settings.{Model, QrCode}
 
   def decode(value, _options) do
     value
