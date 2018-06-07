@@ -3,6 +3,8 @@ defmodule Settings.QrCode do
   Documentation for QrCode.
   """
 
+  @behaviour Settings.Behaviour
+
   @positions [:left_down, :left_up, :right_down, :right_up]
 
   @type position :: :left_down | :left_up | :right_down | :right_up
@@ -16,6 +18,20 @@ defmodule Settings.QrCode do
   defstruct on_client: false,
             on_photo: false,
             position: :left_down
+
+  @impl true
+  def key() do
+    Atom.to_string(__MODULE__)
+  end
+
+  @impl true
+  def init() do
+    %__MODULE__{}
+  end
+
+  @impl true
+  def decoder(model) do
+  end
 
   @spec put_on_client(Settings.Model.t(), boolean()) :: Settings.Model.t()
   def put_on_client(model, toggled?) do

@@ -34,15 +34,6 @@ defmodule ModelTest do
     assert social_media == []
   end
 
-  test "should update model with event name" do
-    name = "Foo Bar"
-    %{name_event: name_event} =
-      %Model{}
-      |> Model.put_name_event(name)
-
-    assert name_event == name
-  end
-
   test "should update model with camera type" do
     %{camera: camera} =
       %Model{camera: "usb_nikon"}
