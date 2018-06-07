@@ -7,7 +7,7 @@ defmodule Settings.Persistence do
 
   @settings_json "settings.json"
 
-  def to_json_file(%Model{} = data) do
+  def to_json_file(data) do
     File.write!(@settings_json, Poison.encode!(data), [:utf8, :write])
   end
 
@@ -20,7 +20,8 @@ defmodule Settings.Persistence do
   end
 
   defp decode_data({:ok, data}) do
-    Poison.decode(data, as: %Model{})
+    # Poison.decode(data, as: %Model{})
+    Poison.decode(data)
   end
 
   defp decode_data(err) do

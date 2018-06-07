@@ -3,13 +3,14 @@ defmodule Settings do
   Settings public API
   """
 
-  alias Settings.{Model, Server}
+  alias Settings.Server
 
   def get() do
     GenServer.call(Server, {:get})
   end
 
-  def set(%Model{} = model) do
+  # def set(%Model{} = model) do
+  def set(model) do
     GenServer.cast(Server, {:set, model})
   end
 end
