@@ -8,4 +8,5 @@ defmodule Settings do
   defdelegate get(fun), to: Server
   defdelegate get_and_update(fun), to: Server
   defdelegate update(fun), to: Server
+  defdelegate register(module), to: Server
 end
