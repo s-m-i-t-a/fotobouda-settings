@@ -1,8 +1,6 @@
 defmodule Settings.MixProject do
   use Mix.Project
 
-  @organization "fotobouda"
-
   def project do
     [
       app: :settings,
@@ -46,10 +44,9 @@ defmodule Settings.MixProject do
         "Jindrich K. Smitka <smitka.j@gmail.com>",
         "Ondrej Tucek <ondrej.tucek@gmail.com>",
       ],
-      licenses: ["Private"],
-      organization: @organization,
+      licenses: ["BSD"],
       links: %{
-        "GitHub" => "https://github.com/s-m-i-t-a/fotobouda-settings",
+        "GitHub" => "https://github.com/s-m-i-t-a/settings",
       }
     ]
   end
