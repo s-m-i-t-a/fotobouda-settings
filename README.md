@@ -1,6 +1,6 @@
 # Settings
 
-**TODO: Add description**
+A persistent settings for elixir applications. Settings is stored to json file named *settings.json.*
 
 ## Installation
 
