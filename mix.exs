@@ -40,6 +40,7 @@ defmodule Settings.MixProject do
 
   defp package() do
     [
+      name: "persistent_settings",
       maintainers: [
         "Jindrich K. Smitka <smitka.j@gmail.com>",
         "Ondrej Tucek <ondrej.tucek@gmail.com>",
