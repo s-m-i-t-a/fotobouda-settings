@@ -11,40 +11,11 @@ defmodule Settings.Persistence do
     File.write!(@settings_json, Poison.encode!(data), [:utf8, :write])
   end
 
-  def from_json_file(state) do
+  def from_json_file(state, modules) do
     @settings_json
     |> File.read()
-    |> decode_data()
-    |> update_social_media_to_atom()
-    |> return_state(state)
-  end
-
-  defp decode_data({:ok, data}) do
-    # Poison.decode(data, as: %Model{})
-    Poison.decode(data)
-  end
-
-  defp decode_data(err) do
-    err
-  end
-
-  defp update_social_media_to_atom({:ok, data}) do
-    update_model =
-      data.social_media
-      |> update_in(fn(media) -> {:ok, media} |> Model.media_to_atom() |> elem(1) end)
-
-    {:ok, update_model}
-  end
-
-  defp update_social_media_to_atom(err) do
-    err
-  end
-
-  defp return_state({:ok, data}, _state) do
-    {:ok, data}
-  end
-
-  defp return_state(_result, state) do
-    {:ok, state}
+    |> Result.and_then(&Poison.decode/1)
+    |> Result.map(fn (value) -> Model.decode(value, modules) end)
+    |> Result.with_default(state)
   end
 end

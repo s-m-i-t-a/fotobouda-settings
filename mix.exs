@@ -8,6 +8,7 @@ defmodule Settings.MixProject do
       app: :settings,
       version: "2.0.0",
       elixir: "~> 1.6",
+      elixirc_paths: elixirc_paths(Mix.env),
       start_permanent: Mix.env() == :prod,
       test_coverage: [tool: ExCoveralls],
       preferred_cli_env: ["coveralls": :test, "coveralls.detail": :test, "coveralls.post": :test, "coveralls.html": :test],
@@ -24,6 +25,10 @@ defmodule Settings.MixProject do
     ]
   end
 
+  # Specifies which paths to compile per environment.
+  defp elixirc_paths(:test), do: ["lib", "test/support"]
+  defp elixirc_paths(_),     do: ["lib"]
+
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
@@ -31,6 +36,7 @@ defmodule Settings.MixProject do
       {:excoveralls, "~> 0.7", only: :test},
       {:credo, "~> 0.3", only: [:dev, :test]},
       {:poison, "~> 3.1"},
+      {:result, "~> 1.1"},
     ]
   end
 
