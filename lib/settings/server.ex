@@ -47,6 +47,16 @@ defmodule Settings.Server do
     {:reply, :ok, {modules, new_model}}
   end
 
+  @impl true
+  def handle_call({:register, module}, _from, {modules, model}) do
+    new_model = Model.add(model, module)
+
+    # update file
+    Persistence.to_json_file(new_model)
+
+    {:reply, :ok, {[module | modules], new_model}}
+  end
+
   # API
 
   @spec get((Model.t() -> a)) :: a when a: var
@@ -62,5 +72,10 @@ defmodule Settings.Server do
   @spec update((Model.t() -> Model.t())) :: :ok
   def update(fun) do
     GenServer.call(__MODULE__, {:update, fun})
+  end
+
+  @spec register(atom()) :: :ok
+  def register(module) do
+    GenServer.call(__MODULE__, {:register, module})
   end
 end

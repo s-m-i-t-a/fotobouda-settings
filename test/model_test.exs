@@ -1,8 +1,6 @@
 defmodule ModelTest do
   use ExUnit.Case
 
-  import ExUnit.CaptureLog
-
   alias Settings.Model
 
   test "should create settings item" do
@@ -17,6 +15,12 @@ defmodule ModelTest do
     }
 
     rv = Model.decode(json, [MySettings])
+
+    assert rv[MySettings.key()] == MySettings.init()
+  end
+
+  test "should add new setting to existent settings" do
+    rv = Model.add(%{}, MySettings)
 
     assert rv[MySettings.key()] == MySettings.init()
   end
