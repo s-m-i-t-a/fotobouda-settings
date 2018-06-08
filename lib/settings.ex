@@ -5,12 +5,7 @@ defmodule Settings do
 
   alias Settings.Server
 
-  def get() do
-    GenServer.call(Server, {:get})
-  end
-
-  # def set(%Model{} = model) do
-  def set(model) do
-    GenServer.cast(Server, {:set, model})
-  end
+  defdelegate get(fun), to: Server
+  defdelegate get_and_update(fun), to: Server
+  defdelegate update(fun), to: Server
 end
