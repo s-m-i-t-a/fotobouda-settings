@@ -7,11 +7,11 @@ defmodule Settings.Supervisor do
     Supervisor.start_link(__MODULE__, args, name: __MODULE__)
   end
 
-  def init(_args) do
+  def init(modules) do
     # List all child processes to be supervised
     children = [
       # Starts a worker by calling: CameraControl.Worker.start_link(arg)
-      {Settings.Server, Settings.Model.create()},
+      {Settings.Server, modules},
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

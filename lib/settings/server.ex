@@ -51,16 +51,16 @@ defmodule Settings.Server do
 
   @spec get((Model.t() -> a)) :: a when a: var
   def get(fun) do
-    GenServer.call(Server, {:get, fun})
+    GenServer.call(__MODULE__, {:get, fun})
   end
 
   @spec get_and_update((Model.t() -> {a, Model.t()})) :: a when a: var
   def get_and_update(fun) do
-    GenServer.call(Server, {:get_and_update, fun})
+    GenServer.call(__MODULE__, {:get_and_update, fun})
   end
 
   @spec update((Model.t() -> Model.t())) :: :ok
   def update(fun) do
-    GenServer.call(Server, {:update, fun})
+    GenServer.call(__MODULE__, {:update, fun})
   end
 end
