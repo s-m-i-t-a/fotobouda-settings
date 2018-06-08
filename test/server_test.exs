@@ -1,23 +1,10 @@
 defmodule ServerTest do
   use ExUnit.Case
 
-  alias Settings.{Model, Server}
+  alias Settings.Server
 
   @settings_json "settings.json"
-  @name_event "foo"
-  @media [:facebook, :twitter]
-  @camera :usb_nikon
-  @position :left_down
-  @state %Model{
-      name_event: @name_event,
-      social_media: @media,
-      camera: @camera,
-      qr_code: %Settings.QrCode{
-        on_client: false,
-        on_photo: false,
-        position: @position
-        }
-      }
+  @modules [MySettings]
 
   describe "Server Settings" do
     setup do
@@ -26,27 +13,72 @@ defmodule ServerTest do
       end
     end
 
-    test "should load default values from settings module if this file does not exist" do
-      {:reply, state, state} = Server.handle_call({:get}, nil, %Model{})
+    test "should create init state and store modules" do
+      {:ok, {modules, model}} = Server.init(@modules)
 
-      assert state == %Model{}
+      assert modules == @modules
+      assert model[MySettings.key()] == MySettings.init()
     end
 
-    test "should save data to settings.json"do
-      {:noreply, new_state} = Server.handle_cast({:set, @state}, nil)
-      {:ok, init} = Server.init(@state)
+    test "should get data from storage" do
+      {:ok, state} = Server.init(@modules)
 
-      assert new_state == init
+      {:reply, model, _state} = Server.handle_call({:get, fn(model) -> model end}, nil, state)
+
+      assert model[MySettings.key()] == MySettings.init()
+    end
+
+    test "should update stored value and save to disk" do
+      {:ok, state} = Server.init(@modules)
+
+      {:reply, :ok, {_modules, model}} = Server.handle_call(
+        {:update, fn(model) -> put_in(model, [MySettings.key()], :foo) end},
+        nil,
+        state
+      )
+
+      assert model[MySettings.key()] == :foo
       assert File.exists?(@settings_json)
+
+      assert load_stored_data()[MySettings.key()] == "foo"
+    end
+
+    test "should get value, update it and save to disk" do
+      {:ok, state} = Server.init(@modules)
+
+      {:reply, old_value, {_modules, model}} = Server.handle_call(
+        {:get_and_update, fn(model) -> {model[MySettings.key()], put_in(model, [MySettings.key()], :foo)} end},
+        nil,
+        state
+      )
+
+      assert old_value == MySettings.init()
+      assert model[MySettings.key()] == :foo
+      assert File.exists?(@settings_json)
+
+      assert load_stored_data()[MySettings.key()] == "foo"
     end
 
     test "should load data from settings.json if this file exists" do
-      Server.handle_cast({:set, @state}, nil)
-      {:ok, init} = Server.init(@state)
+      {:ok, state} = Server.init(@modules)
+      {:reply, :ok, _state} = Server.handle_call(
+        {:update, fn(model) -> put_in(model, [MySettings.key()], :foo) end},
+        nil,
+        state
+      )
 
-      assert init == @state
       assert File.exists?(@settings_json)
+
+      {:ok, {_modules, model}} = Server.init(@modules)
+
+      assert model[MySettings.key()] == :foo
     end
+  end
+
+  defp load_stored_data() do
+    @settings_json
+    |> File.read!()
+    |> Poison.decode!()
   end
 end
 
