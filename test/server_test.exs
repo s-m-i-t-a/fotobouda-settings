@@ -73,6 +73,16 @@ defmodule ServerTest do
 
       assert model[MySettings.key()] == :foo
     end
+
+    test "should append module in runtime" do
+      {:reply, :ok, {modules, model}} = Server.handle_call({:register, MySettings}, nil, {[], %{}})
+
+      assert modules == @modules
+      assert model[MySettings.key()] == MySettings.init()
+
+      assert File.exists?(@settings_json)
+      assert load_stored_data()[MySettings.key()] == to_string(MySettings.init())
+    end
   end
 
   defp load_stored_data() do
